@@ -1,84 +1,80 @@
-var util = require( '../utils/util.js' );
-var api = require( './api.js' );
+var util = require('../utils/util.js');
+var api = require('./api.js');
 
 var app = getApp();
 
-/**
- * 网络请求方法
- * @param url {string} 请求url
- * @param data {object} 参数
- * @param successCallback {function} 成功回调函数
- * @param errorCallback {function} 失败回调函数
- * @param completeCallback {function} 完成回调函数
- * @returns {void}
- */
-function requestData( url, data, successCallback, errorCallback, completeCallback ) {
-    if( app.debug ) {
-        console.log( 'requestData url: ', url );
+//  网络请求方法
+//   url ： 请求url
+//   data ： 参数
+//   successCallback ： 成功回调函数
+//   errorCallback： 失败回调函数
+//   completeCallback ： 完成回调函数
+function requestData(url, data, successCallback, errorCallback, completeCallback) {
+    if (app.debug) {
+        console.log('requestData url: ', url);
     }
-    wx.request( {
+    wx.request({
         url: url,
         data: data,
         header: { 'Content-Type': 'application/json' },
-        success: function( res ) {
-            if( app.debug ) {
-                console.log( 'response data: ', res );
+        success: function(res) {
+            if (app.debug) {
+                console.log('response data: ', res);
             }
-            if( res.statusCode == 200 )
-                util.isFunction( successCallback ) && successCallback( res.data );
+            if (res.statusCode == 200)
+                util.isFunction(successCallback) && successCallback(res.data);
             else
-                util.isFunction( errorCallback ) && errorCallback();
+                util.isFunction(errorCallback) && errorCallback();
         },
         error: function() {
-            util.isFunction( errorCallback ) && errorCallback();
+            util.isFunction(errorCallback) && errorCallback();
         },
         complete: function() {
-            util.isFunction( completeCallback ) && completeCallback();
+            util.isFunction(completeCallback) && completeCallback();
         }
     });
 }
 
-function getNewsLatest( successCallback, errorCallback, completeCallback ) {
-    requestData( api.getLatestNews(), {}, successCallback, errorCallback, completeCallback );
+function getNewsLatest(successCallback, errorCallback, completeCallback) {
+    requestData(api.getLatestNews(), {}, successCallback, errorCallback, completeCallback);
 }
 // 获取以往日报 
-function getBeforeNews( date, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getBeforeNews( date ), {}, successCallback, errorCallback, completeCallback );
+function getBeforeNews(date, successCallback, errorCallback, completeCallback) {
+    requestData(api.getBeforeNews(date), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getNewsDetail( newsId, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getNewsDetail( newsId ), {}, successCallback, errorCallback, completeCallback );
+function getNewsDetail(newsId, successCallback, errorCallback, completeCallback) {
+    requestData(api.getNewsDetail(newsId), {}, successCallback, errorCallback, completeCallback);
 }
 // 获取主题日报列表
-function getTheme( successCallback, errorCallback, completeCallback ) {
-    requestData( api.getTheme(), {}, successCallback, errorCallback, completeCallback );
+function getTheme(successCallback, errorCallback, completeCallback) {
+    requestData(api.getTheme(), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getThemeStories( themeId, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getThemeStories( themeId ), {}, successCallback, errorCallback, completeCallback );
+function getThemeStories(themeId, successCallback, errorCallback, completeCallback) {
+    requestData(api.getThemeStories(themeId), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getStoryShortComments( storyId, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getStoryShortComments( storyId ), {}, successCallback, errorCallback, completeCallback );
+function getStoryShortComments(storyId, successCallback, errorCallback, completeCallback) {
+    requestData(api.getStoryShortComments(storyId), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getStoryLongComments( storyId, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getStoryLongComments( storyId ), {}, successCallback, errorCallback, completeCallback );
+function getStoryLongComments(storyId, successCallback, errorCallback, completeCallback) {
+    requestData(api.getStoryLongComments(storyId), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getStoryExtraInfo( storyId, successCallback, errorCallback, completeCallback ) {
-    requestData( api.getStoryExtraInfo( storyId ), {}, successCallback, errorCallback, completeCallback );
+function getStoryExtraInfo(storyId, successCallback, errorCallback, completeCallback) {
+    requestData(api.getStoryExtraInfo(storyId), {}, successCallback, errorCallback, completeCallback);
 }
 
-function getSplashCover( size, successCallback, errorCallback, completeCallback ) {
-    requestData( 
+function getSplashCover(size, successCallback, errorCallback, completeCallback) {
+    requestData(
         // 获取启动界面封面（调用api.js下的getSplashCover）
-        api.getSplashCover( size ), 
-        {}, 
+        api.getSplashCover(size), {},
         successCallback,
         errorCallback,
-        completeCallback 
-     );
+        completeCallback
+    );
 }
 
 module.exports = {

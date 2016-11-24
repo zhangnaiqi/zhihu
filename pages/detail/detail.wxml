@@ -45,10 +45,6 @@
                     </block>
                     
                 </view>
-
-                <!--<view  class="discuss" wx:if="{{item.more && item.more != ''}}">
-                    <navigator url="{{item.more}}">查看知乎讨论</navigator>
-                </view>-->
             </view>
         </block>
     </view>
@@ -87,7 +83,3 @@
 <loading hidden="{{!loading}}">
     加载中...
 </loading>
-
-<!--<modal class="modal" hidden="{{modalMsgHidden}}" no-cancel bindconfirm="modalMsgHiddenEvent">
-<view> {{modalMsg}} </view>
-</modal>-->

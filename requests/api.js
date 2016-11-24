@@ -5,57 +5,38 @@ const API_V3 = API_BASE + '/3';
 const API_NEWS = API_V4 + '/news';
 const API_STORY = API_V4 + '/story';
 
-/**
- * 获取最新日报
- * @returns {string}
- */
+//  获取最新日报
 function getLatestNews() {
     return API_NEWS + '/latest';
 }
 
-/**
- * 获取日报详情
- * @param {int} newsId 日报id
- * @returns {string}
- */
-function getNewsDetail( newsId ) {
+//  获取日报详情
+
+function getNewsDetail(newsId) {
     return API_NEWS + '/' + newsId;
 }
 
-/**
- * 获取以往日报 
- * 知乎日报最早20130519
- * @param {string} date 日期 yyyMMdd
- * @returns {string}
- */
-function getBeforeNews( date ) {
+
+//  获取以往日报 
+
+function getBeforeNews(date) {
     return 'http://news.at.zhihu.com/api/4/news/before/' + date;
 }
 
-/**
- * 获取新闻额外的评论数量和点赞数量等信息
- * @param {int} newsId 日报id
- * @returns {string}
- */
-function getStoryExtraInfo( storyId ) {
+// 获取新闻额外的评论数量和点赞数量等信息
+
+function getStoryExtraInfo(storyId) {
     return API_STORY + '-extra/' + storyId;
 }
 
-/**
- * 获取新闻对应长评
- * @param {int} storyId 新闻idid
- * @returns {string}
- */
-function getStoryLongComments( storyId ) {
+// 获取新闻对应长评
+
+function getStoryLongComments(storyId) {
     return API_STORY + '/' + storyId + '/long-comments';
 }
 
-/**
- * 新闻对应短评论查看
- * @param {int} storyId 新闻idid
- * @returns {string}
- */
-function getStorytoryShortComments( storyId ) {
+// 新闻对应短评论查看
+function getStorytoryShortComments(storyId) {
     return API_STORY + '/' + storyId + '/short-comments';
 }
 // 获取主题日报列表
@@ -63,24 +44,21 @@ function getTheme() {
     return API_V4 + '/themes';
 }
 
-function getThemeStories( themeId ) {
+function getThemeStories(themeId) {
     return API_V4 + '/theme/' + themeId;
 }
 
-function getStoryLongComments( storyId ) {
+function getStoryLongComments(storyId) {
     return API_STORY + '/' + storyId + '/long-comments';
 }
 
-function getStoryShortComments( storyId ) {
+function getStoryShortComments(storyId) {
     return API_STORY + '/' + storyId + '/short-comments';
 }
 
-/**
- * 获取启动界面封面
- * @param {string} size 图片尺寸 格式：width*height
- * @return {string}
- */
-function getSplashCover( size ) {
+// 获取启动界面封面
+
+function getSplashCover(size) {
     return API_V4 + "/start-image/" + size;
 }
 

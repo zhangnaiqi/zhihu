@@ -33,9 +33,6 @@
       <image src="../../images/home.png" class="home-icon"></image>
       <text class="home-text">首页</text>
     </view>
-    <!--<view class="menu-item home" bindtap="toHomePage" wx:if=else>-->
-      <!--<text>首页</text>-->
-    <!--</view>-->
     <view class="slide-inner">
       <block wx:for="{{themeData}}">
         <view class="menu-item" data-id="{{item.id}}" wx:if="{{themeId==item.id}}" style="background:rgba(0,0,0,0.10)" bindtap="toThemePage">
@@ -117,8 +114,3 @@
 <loading hidden="{{!loading}}">
     {{loadingMsg}}
 </loading>
-
-<modal class="modal" hidden="{{modalMsgHidden}}" no-cancel bindconfirm="modalMsgHiddenEvent">
-  <view style="text-align:center;color:#000;font-weight:bold"> Designed by Oopsguy. </view>
-  <view style="text-align:center;">https://github.com/oopsguy/WechatSmallApps</view>
-</modal>
