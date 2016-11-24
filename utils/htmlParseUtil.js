@@ -1,51 +1,25 @@
 
-/*
- * HTML Parser By John Resig (ejohn.org)
- * Original code by Erik Arvidsson, Mozilla Public License
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
- *
- * // Use like so:
- * HTMLParser(htmlString, {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- * // or to get an XML string:
- * HTMLtoXML(htmlString);
- *
- * // or to get an XML DOM Document
- * HTMLtoDOM(htmlString);
- *
- * // or to inject into an existing document/DOM node
- * HTMLtoDOM(htmlString, document);
- * HTMLtoDOM(htmlString, document.body);
- *
- */
 
-// Regular Expressions for parsing tags and attributes
+
+// 正则表达式解析标记和属性
 var startTag = /^<(\w+)((?:\s+[\w\-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/,
   endTag = /^<\/(\w+)[^>]*>/,
   attr = /([\w\-]+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g;
 
-// Empty Elements - HTML 4.01
+// 空元素——HTML 4.01
 var empty = makeMap( "area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed" );
 
-// Block Elements - HTML 4.01
+// 区元素 - HTML 4.01
 var block = makeMap( "address,applet,blockquote,button,center,dd,del,dir,div,dl,dt,fieldset,form,frameset,hr,iframe,ins,isindex,li,map,menu,noframes,noscript,object,ol,p,pre,script,table,tbody,td,tfoot,th,thead,tr,ul" );
 
-// Inline Elements - HTML 4.01
+// 内联元素 - HTML 4.01
 var inline = makeMap( "a,abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var" );
 
-// Elements that you can, intentionally, leave open
-// (and which close themselves)
+
 var closeSelf = makeMap( "colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr" );
  
-// Attributes that have their values filled in disabled="disabled"
 var fillAttrs = makeMap( "checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected" );
 
-// Special Elements (can contain anything)
 var special = makeMap( "script,style" );
 
 var HTMLParser = function( html, handler ) {
@@ -57,11 +31,9 @@ var HTMLParser = function( html, handler ) {
   while( html ) {
     chars = true;
 
-    // Make sure we're not in a script or style element
-    if( !stack.last() || !special[ stack.last() ] ) {
+  if( !stack.last() || !special[ stack.last() ] ) {
 
-      // Comment, DOCTYPE INCLUDED
-      if( html.indexOf( "<!--" ) == 0 ) {
+     if( html.indexOf( "<!--" ) == 0 ) {
         index = html.indexOf( "-->" );
 
         if( index >= 0 ) {
@@ -70,7 +42,6 @@ var HTMLParser = function( html, handler ) {
           html = html.substring( index + 3 );
           chars = false;
         }
-        //doctype
       } else if( html.indexOf( "<!" ) == 0 ) {
         index = html.indexOf( ">" );
 
@@ -80,7 +51,6 @@ var HTMLParser = function( html, handler ) {
           html = html.substring( index + 1 );
           chars = false;
         }
-        //script
       } else if( html.indexOf( "<script" ) == 0 ) {
         index = html.indexOf( "</script>" );
         if( index >= 0 ) {
@@ -89,7 +59,6 @@ var HTMLParser = function( html, handler ) {
           html = html.substring( index + 9 );
           chars = false;
         }
-        //style
       } else if( html.indexOf( "<style>" ) == 0 ) {
         index = html.indexOf( "</style>" );
         if( index >= 0 ) {
@@ -98,7 +67,6 @@ var HTMLParser = function( html, handler ) {
           html = html.substring( index + 8 );
           chars = false;
         }
-        // end tag
       } else if( html.indexOf( "</" ) == 0 ) {
         match = html.match( endTag );
 
@@ -107,7 +75,6 @@ var HTMLParser = function( html, handler ) {
           match[ 0 ].replace( endTag, parseEndTag );
           chars = false;
         }
-        // start tag
       } else if( html.indexOf( "<" ) == 0 ) {
         match = html.match( startTag );
 
@@ -146,8 +113,7 @@ var HTMLParser = function( html, handler ) {
     last = html;
   }
 
-  // Clean up any remaining tags
-  parseEndTag();
+ parseEndTag();
 
   function parseStartTag( tag, tagName, rest, unary ) {
     if( block[ tagName ] ) {
@@ -173,12 +139,7 @@ var HTMLParser = function( html, handler ) {
           arguments[ 3 ] ? arguments[ 3 ] :
             arguments[ 4 ] ? arguments[ 4 ] :
               fillAttrs[ name ] ? name : "";
-        attrs[ name ] = value;//value.replace(/(^|[^\\])"/g, '$1\\\"') //";
-        //attrs.push({
-        //	name: name,
-        //	value: value,
-        //	escaped: value.replace(/(^|[^\\])"/g, '$1\\\"') //"
-        //});
+        attrs[ name ] = value;
       });
 
       if( handler.start )
@@ -187,23 +148,19 @@ var HTMLParser = function( html, handler ) {
   }
 
   function parseEndTag( tag, tagName ) {
-    // If no tag name is provided, clean shop
-    if( !tagName )
+   if( !tagName )
       var pos = 0;
 
-    // Find the closest opened tag of the same type
-    else
+   else
       for( var pos = stack.length - 1;pos >= 0;pos-- )
         if( stack[ pos ] == tagName )
           break;
 
     if( pos >= 0 ) {
-      // Close all the open elements, up the stack
-      for( var i = stack.length - 1;i >= pos;i-- )
+     for( var i = stack.length - 1;i >= pos;i-- )
         if( handler.end )
           handler.end( stack[ i ] );
 
-      // Remove the open elements from the stack
       stack.length = pos;
     }
   }
@@ -235,94 +192,6 @@ var HTMLtoXML = function( html ) {
   return results;
 };
 
-// this.HTMLtoDOM = function( html, doc ) {
-// 	// There can be only one of these elements
-// 	var one = makeMap( "html,head,body,title" );
-
-// 	// Enforce a structure for the document
-// 	var structure = {
-// 		link: "head",
-// 		base: "head"
-// 	};
-
-// 	if( !doc ) {
-// 		if( typeof DOMDocument != "undefined" )
-// 			doc = new DOMDocument();
-// 		else if( typeof document != "undefined" && document.implementation && document.implementation.createDocument )
-// 			doc = document.implementation.createDocument( "", "", null );
-// 		else if( typeof ActiveX != "undefined" )
-// 			doc = new ActiveXObject( "Msxml.DOMDocument" );
-
-// 	} else
-// 		doc = doc.ownerDocument ||
-// 			doc.getOwnerDocument && doc.getOwnerDocument() ||
-// 			doc;
-
-// 	var elems = [],
-// 		documentElement = doc.documentElement ||
-// 			doc.getDocumentElement && doc.getDocumentElement();
-
-// 	// If we're dealing with an empty document then we
-// 	// need to pre-populate it with the HTML document structure
-// 	if( !documentElement && doc.createElement ) ( function() {
-// 		var html = doc.createElement( "html" );
-// 		var head = doc.createElement( "head" );
-// 		head.appendChild( doc.createElement( "title" ) );
-// 		html.appendChild( head );
-// 		html.appendChild( doc.createElement( "body" ) );
-// 		doc.appendChild( html );
-// 	})();
-
-// 	// Find all the unique elements
-// 	if( doc.getElementsByTagName )
-// 		for( var i in one )
-// 			one[ i ] = doc.getElementsByTagName( i )[ 0 ];
-
-// 	// If we're working with a document, inject contents into
-// 	// the body element
-// 	var curParentNode = one.body;
-
-// 	HTMLParser( html, {
-// 		start: function( tagName, attrs, unary ) {
-// 			// If it's a pre-built element, then we can ignore
-// 			// its construction
-// 			if( one[ tagName ] ) {
-// 				curParentNode = one[ tagName ];
-// 				return;
-// 			}
-
-// 			var elem = doc.createElement( tagName );
-
-// 			for( var attr in attrs )
-// 				elem.setAttribute( attrs[ attr ].name, attrs[ attr ].value );
-
-// 			if( structure[ tagName ] && typeof one[ structure[ tagName ] ] != "boolean" )
-// 				one[ structure[ tagName ] ].appendChild( elem );
-
-// 			else if( curParentNode && curParentNode.appendChild )
-// 				curParentNode.appendChild( elem );
-
-// 			if( !unary ) {
-// 				elems.push( elem );
-// 				curParentNode = elem;
-// 			}
-// 		},
-// 		end: function( tag ) {
-// 			elems.length -= 1;
-
-// 			// Init the new parentNode
-// 			curParentNode = elems[ elems.length - 1 ];
-// 		},
-// 		chars: function( text ) {
-// 			curParentNode.appendChild( doc.createTextNode( text ) );
-// 		},
-// 		comment: function( text ) {
-// 			// create comment node
-// 		}
-// 	});
-
-// 	return doc;
-// };
 
 function makeMap( str ) {
   var obj = {}, items = str.split( "," );
@@ -332,30 +201,7 @@ function makeMap( str ) {
 }
 
 
-/**
 
-The MIT License
-
-Copyright (c) 2008 Pickere Yee(pickerel@gmail.com)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-**/
 var __HTML_EXTRACTOR_VERSION__ = "v0.0.1";
 var __HTML_EXTRACTOR_DEBUG__ = true;
 var html_extractor = function( html ) {
@@ -378,7 +224,6 @@ String.prototype.jhe_ma = function( query_params ) {
 //匹配指定标记内的指定内容，tag是个变长参数，返回结果为匹配内容，不包括任何html标签，只是文本。
 String.prototype.jhe_mt = function( query_params ) { return html_extractor_query( this, arguments ).mt( html_extractor_query_callback( arguments ) ); }
 
-// Array Remove - By John Resig (MIT Licensed)
 Array.prototype.remove = function( from, to ) {
   if (!this) return;
 	var rest = this.slice(( to || from ) + 1 || this.length );
@@ -615,10 +460,6 @@ html_extractor.prototype._match = function( _html_type_result, inner, callback )
           this._prev_matched_index = -1;
           //全匹配置为否
           this._all_matched = false;
-
-          //for( var i = 0; i < self.tags.length; i++)this._matched[i] = false;
-          //this._matched_tags.clear();
-          //this._matched_tags_attrs.clear();
         }
         this._matched[ this._matched_tags[ this._tag_index ] ] = false;
         if (this._matched_tags)
